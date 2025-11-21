@@ -1,0 +1,12 @@
+# Tratamento automático de CRLF/LF
+* text=auto
+
+# Força arquivos JSON a sempre usarem LF no repositório
+*.json text eol=lf
+
+# Para arquivos Markdown, scripts e configs
+*.md text
+*.js text
+*.json text
+*.sh text eol=lf
+*.bat text eol=crlf
