@@ -55,17 +55,22 @@ node client-demo.js
 
 **Mensageria — Testes**
 
-- **AMQP (variável):** defina a variável de ambiente `AMQP_URL` com a sua URL AMQPS antes de executar os workers (não inclua a URL neste arquivo; use a sua instância CloudAMQP).
-
-- **Start (consumers):** em terminais separados, execute os workers que escutam o exchange `shopping_events`:
+- **AMQP (.env padrão):** Os scripts e o `list-service` carregam automaticamente a URL via `.env`.
+- **Start (consumers):** em terminais separados, execute os workers/scripts que escutam o exchange `shopping_events`:
 
 ```powershell
 node .\scripts\consumer-log.js
 node .\scripts\consumer-analytics.js
 ```
 
-- **Publicar mensagem de teste:** envie uma mensagem de checkout de exemplo para verificar os consumers:
+- **Publicar mensagem de teste (unitário):** envie uma mensagem de checkout de exemplo para verificar os consumers rapidamente:
 
 ```powershell
 node .\scripts\publish-test.js
+```
+
+- **Demo end-to-end (recomendado):** O fluxo completo via API Gateway, pode ser testado com o script que: registra/loga o usuario, cria uma lista, adiciona item para essa lista e dispara o `checkout`:
+
+```powershell
+node .\scripts\trigger-checkout.js
 ```
