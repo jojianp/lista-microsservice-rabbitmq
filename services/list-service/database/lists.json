@@ -1,0 +1,80 @@
+[
+  {
+    "id": "30e7067f-3117-4f88-a88d-8584f6da44b0",
+    "userId": "846bd963-5b3d-44be-b52a-eca7aca7b57c",
+    "name": "Lista para checkout",
+    "description": "Teste de checkout via gateway",
+    "status": "active",
+    "items": [
+      {
+        "itemId": "7d6fa3a8-470e-4d6f-80b3-760adda91416",
+        "itemName": "Arroz Integral Orgânico 1kg",
+        "quantity": 2,
+        "unit": "1kg",
+        "estimatedPrice": 19,
+        "purchased": false,
+        "notes": "",
+        "addedAt": "2025-11-21T18:16:24.469Z"
+      }
+    ],
+    "summary": {
+      "totalItems": 1,
+      "purchasedItems": 0,
+      "estimatedTotal": 19
+    },
+    "createdAt": "2025-11-21T18:16:24.391Z",
+    "updatedAt": "2025-11-21T18:16:24.469Z"
+  },
+  {
+    "id": "338c2fa2-adf3-4313-8943-08d46413f708",
+    "userId": "7c39c6e7-8fc3-48c3-b8af-bb84f7f58c71",
+    "name": "Lista para checkout",
+    "description": "Teste de checkout via gateway",
+    "status": "active",
+    "items": [
+      {
+        "itemId": "7d6fa3a8-470e-4d6f-80b3-760adda91416",
+        "itemName": "Arroz Integral Orgânico 1kg",
+        "quantity": 2,
+        "unit": "1kg",
+        "estimatedPrice": 19,
+        "purchased": false,
+        "notes": "",
+        "addedAt": "2025-11-21T18:17:49.732Z"
+      }
+    ],
+    "summary": {
+      "totalItems": 1,
+      "purchasedItems": 0,
+      "estimatedTotal": 19
+    },
+    "createdAt": "2025-11-21T18:17:49.702Z",
+    "updatedAt": "2025-11-21T18:17:49.733Z"
+  },
+  {
+    "id": "a0579eaa-8d4b-4764-bd90-62aa68be8c14",
+    "userId": "1e700433-f488-4e93-805e-ea60e2523817",
+    "name": "Lista para checkout",
+    "description": "Teste de checkout via gateway",
+    "status": "active",
+    "items": [
+      {
+        "itemId": "7d6fa3a8-470e-4d6f-80b3-760adda91416",
+        "itemName": "Arroz Integral Orgânico 1kg",
+        "quantity": 2,
+        "unit": "1kg",
+        "estimatedPrice": 19,
+        "purchased": false,
+        "notes": "",
+        "addedAt": "2025-11-21T18:20:54.621Z"
+      }
+    ],
+    "summary": {
+      "totalItems": 1,
+      "purchasedItems": 0,
+      "estimatedTotal": 19
+    },
+    "createdAt": "2025-11-21T18:20:54.594Z",
+    "updatedAt": "2025-11-21T18:20:54.621Z"
+  }
+]

@@ -52,3 +52,20 @@ npm run start:gateway
 # Terminal 5 - Cliente demo
 node client-demo.js
 ```
+
+**Mensageria — Testes**
+
+- **AMQP (variável):** defina a variável de ambiente `AMQP_URL` com a sua URL AMQPS antes de executar os workers (não inclua a URL neste arquivo; use a sua instância CloudAMQP).
+
+- **Start (consumers):** em terminais separados, execute os workers que escutam o exchange `shopping_events`:
+
+```powershell
+node .\scripts\consumer-log.js
+node .\scripts\consumer-analytics.js
+```
+
+- **Publicar mensagem de teste:** envie uma mensagem de checkout de exemplo para verificar os consumers:
+
+```powershell
+node .\scripts\publish-test.js
+```

@@ -5,9 +5,11 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
+require('dotenv').config();
 const axios = require('axios');
 const JsonDatabase = require('../../shared/JsonDatabase');
 const registry = require('../../shared/serviceRegistry');
+const amqplib = require('amqplib');
 
 const app = express();
 app.use(helmet());
@@ -216,6 +218,58 @@ app.get('/lists/:id/summary', autenticacao, async (req, res) => {
         res.json(lista.summary || { totalItems: 0, purchasedItems: 0, estimatedTotal: 0 });
     } catch (err) {
         console.error('Erro ao obter resumo da lista:', err.message);
+        res.status(500).json({ erro: 'erro_interno' });
+    }
+});
+
+// Publish evento de checkout para Exchange 'shopping_events'
+async function publishCheckoutEvent(routingKey, message) {
+    const amqpUrl = process.env.AMQP_URL;
+    if (!amqpUrl) {
+        console.error('AMQP_URL not set - evento de checkout não será publicado. Defina a variável AMQP_URL ou crie um .env (veja .env.example).');
+        return;
+    }
+    let connection;
+    try {
+        connection = await amqplib.connect(amqpUrl);
+        const channel = await connection.createChannel();
+        await channel.assertExchange('shopping_events', 'topic', { durable: true });
+        const payload = Buffer.from(JSON.stringify(message));
+        channel.publish('shopping_events', routingKey, payload, { persistent: true, contentType: 'application/json' });
+        await channel.close();
+    } catch (err) {
+        console.error('Falha ao publicar evento de checkout:', err.message);
+    } finally {
+        try { if (connection) await connection.close(); } catch (e) { /* ignore */ }
+    }
+}
+
+// Endpoint de checkout: publica evento e retorna 202 imediatamente
+app.post('/lists/:id/checkout', autenticacao, async (req, res) => {
+    try {
+        const lista = await listsDb.findById(req.params.id);
+        if (!lista) return res.status(404).json({ erro: 'Lista não encontrada' });
+        if (lista.userId !== req.usuario.id) return res.status(403).json({ erro: 'Acesso negado' });
+
+        // Calcular total (usar summary se disponível)
+        const total = lista.summary && lista.summary.estimatedTotal ? lista.summary.estimatedTotal : (lista.items || []).reduce((s, it) => s + (it.estimatedPrice || 0), 0);
+
+        const evento = {
+            listId: lista.id,
+            userId: lista.userId,
+            userEmail: req.usuario.email || null,
+            items: lista.items || [],
+            summary: lista.summary || { totalItems: 0, purchasedItems: 0, estimatedTotal: total },
+            timestamp: new Date().toISOString()
+        };
+
+        // Publicar assincronamente (não bloquear resposta)
+        publishCheckoutEvent('list.checkout.completed', evento).catch(err => console.error(err));
+
+        // Responder imediatamente
+        res.status(202).json({ status: 'accepted', message: 'Checkout recebido e será processado assíncronamente' });
+    } catch (err) {
+        console.error('Erro no checkout:', err.message);
         res.status(500).json({ erro: 'erro_interno' });
     }
 });
