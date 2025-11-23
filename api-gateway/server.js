@@ -100,8 +100,6 @@ async function proxyRequisicao(nomeServico, requisicao, resposta) {
     const pathDoServico = requisicao.originalUrl.replace(/^\/api/, '');
     const urlFinal = `${servico.url}${pathDoServico}`;
 
-    console.log('🔗 URL final:', urlFinal);
-
     const headersEncaminhados = { ...requisicao.headers };
 
     const headersParaRemover = [

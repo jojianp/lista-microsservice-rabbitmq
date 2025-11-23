@@ -5,7 +5,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 const axios = require('axios');
 const JsonDatabase = require('../../shared/JsonDatabase');
 const registry = require('../../shared/serviceRegistry');
@@ -37,7 +37,10 @@ function autenticacao(req, res, next) {
     });
 }
 
-app.get('/health', (req, res) => res.json({ status: 'ok', servico: 'list-service' }));
+app.get('/health', (req, res) => {
+    const amqpConfigured = !!process.env.AMQP_URL;
+    res.json({ status: 'ok', servico: 'list-service', amqp: amqpConfigured });
+});
 
 // Criar lista
 app.post('/lists', autenticacao, async (req, res) => {

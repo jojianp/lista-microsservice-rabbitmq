@@ -11,7 +11,7 @@ const BINDING_KEY = 'list.checkout.#';
 const QUEUE = 'checkout_analytics';
 
 async function start() {
-    console.log('Consumer (analytics) iniciando...');
+    console.log(`Consumer (analytics) pronto — aguardando mensagens na fila '${QUEUE}' (exchange: ${EXCHANGE}, binding: ${BINDING_KEY})`);
     const conn = await amqplib.connect(AMQP_URL);
     const ch = await conn.createChannel();
     await ch.assertExchange(EXCHANGE, 'topic', { durable: true });
