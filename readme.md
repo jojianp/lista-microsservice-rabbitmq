@@ -63,12 +63,6 @@ node .\scripts\consumer-log.js
 node .\scripts\consumer-analytics.js
 ```
 
-- **Publicar mensagem de teste (unitário):** envie uma mensagem de checkout de exemplo para verificar os consumers rapidamente:
-
-```powershell
-node .\scripts\publish-test.js
-```
-
 - **Demo end-to-end:** O fluxo completo via API Gateway, pode ser testado com o script que: registra/loga o usuario, cria uma lista, adiciona item para essa lista e dispara o `checkout`:
 
 ```powershell
