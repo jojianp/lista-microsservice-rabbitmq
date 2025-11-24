@@ -69,7 +69,7 @@ node .\scripts\consumer-analytics.js
 node .\scripts\publish-test.js
 ```
 
-- **Demo end-to-end (recomendado):** O fluxo completo via API Gateway, pode ser testado com o script que: registra/loga o usuario, cria uma lista, adiciona item para essa lista e dispara o `checkout`:
+- **Demo end-to-end:** O fluxo completo via API Gateway, pode ser testado com o script que: registra/loga o usuario, cria uma lista, adiciona item para essa lista e dispara o `checkout`:
 
 ```powershell
 node .\scripts\trigger-checkout.js
