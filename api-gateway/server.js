@@ -125,17 +125,11 @@ async function proxyRequisicao(nomeServico, requisicao, resposta) {
       responseType: 'json',
     };
 
-    console.debug(`Encaminhando ${requisicao.method} ${urlFinal} -> ${nomeServico}`);
-    console.debug('Headers encaminhados:', Object.keys(headersEncaminhados));
-
     if (requisicao.body && Object.keys(requisicao.body).length < 20) {
-      console.debug('Corpo encaminhado:', requisicao.body);
     }
 
     const respostaServico = await axios(configuracaoAxios);
     registrarSucesso(nomeServico);
-
-    console.debug(`Resposta de ${nomeServico}: Status ${respostaServico.status}, Tamanho: ${JSON.stringify(respostaServico.data).length} bytes`);
 
     resposta.status(respostaServico.status)
       .set(respostaServico.headers)
