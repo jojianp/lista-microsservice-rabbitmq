@@ -1,0 +1,384 @@
+{
+  "info": {
+    "name": "Sistema de Listas de Compras - TODAS as Rotas",
+    "description": "Collection completa para testar todas as funcionalidades do sistema de microsserviços",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" },
+    { "key": "listId", "value": "", "type": "string" },
+    { "key": "itemId", "value": "c2a6985d-3f9a-49d9-a700-8d86ee5226df", "type": "string" }
+  ],
+
+  "item": [
+    {
+      "name": "CONFIGURACAO",
+      "item": [
+        {
+          "name": "Set Environment Variables",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Set environment variables\", function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "  pm.collectionVariables.set(\"userId\", jsonData.usuario.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+
+    {
+      "name": "HEALTH & REGISTRY",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registry",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/registry",
+              "host": ["{{baseUrl}}"],
+              "path": ["registry"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+
+    {
+      "name": "USER SERVICE - Autenticacao",
+      "item": [
+        {
+          "name": "1. Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"username\": \"testuser\",\n  \"password\": \"senha123\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"preferences\": {\n    \"defaultStore\": \"Supermercado Teste\",\n    \"currency\": \"BRL\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+
+        {
+          "name": "2. Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+
+        {
+          "name": "3. Buscar Usuario por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          },
+          "response": []
+        },
+
+        {
+          "name": "4. Atualizar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Teste Atualizado\",\n  \"preferences\": {\n    \"defaultStore\": \"Supermercado Novo\",\n    \"currency\": \"USD\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+
+    {
+      "name": "ITEM SERVICE - Produtos",
+      "item": [
+        {
+          "name": "1. Listar Itens",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/items" },
+          "response": []
+        },
+        {
+          "name": "2. Buscar Item por ID",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/items/{{itemId}}" },
+          "response": []
+        },
+        {
+          "name": "3. Categoria Alimentos",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/items?category=Alimentos" },
+          "response": []
+        },
+        {
+          "name": "4. Categoria Limpeza",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/items?category=Limpeza" },
+          "response": []
+        },
+        {
+          "name": "5. Categorias",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/categories" },
+          "response": []
+        },
+        {
+          "name": "6. Buscar Itens por Nome",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/search?q=arroz" },
+          "response": []
+        },
+        {
+          "name": "7. Criar Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Novo Produto Teste\",\n  \"category\": \"Alimentos\",\n  \"brand\": \"Marca Teste\",\n  \"unit\": \"un\",\n  \"averagePrice\": 5.99,\n  \"barcode\": \"987654321\",\n  \"description\": \"Produto criado via Postman\",\n  \"active\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/items"
+          },
+          "response": []
+        }
+      ]
+    },
+
+    {
+      "name": "LIST SERVICE - Listas",
+      "item": [
+        {
+          "name": "1. Criar Lista",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"listId\", jsonData.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Minha Lista de Compras\",\n  \"description\": \"Lista criada via Postman\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lists"
+          },
+          "response": []
+        },
+
+        {
+          "name": "2. Listar Listas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lists"
+          },
+          "response": []
+        },
+
+        {
+          "name": "3. Buscar Lista",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lists/{{listId}}"
+          },
+          "response": []
+        },
+
+        {
+          "name": "4. Atualizar Lista",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lista Atualizada\",\n  \"description\": \"Atualizada via Postman\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lists/{{listId}}"
+          },
+          "response": []
+        },
+
+        {
+          "name": "5. Adicionar Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"quantity\": 3,\n  \"unit\": \"1kg\",\n  \"notes\": \"Item via Postman\"\n}"
+            },
+            "url": "{{baseUrl}}/api/lists/{{listId}}/items"
+          },
+          "response": []
+        },
+
+        {
+          "name": "6. Ver Resumo",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lists/{{listId}}/summary"
+          },
+          "response": []
+        },
+
+        {
+          "name": "7. Marcar Item Comprado",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"purchased\": true\n}" },
+            "url": "{{baseUrl}}/api/lists/{{listId}}/items/{{itemId}}"
+          },
+          "response": []
+        },
+
+        {
+          "name": "8. Resumo Atualizado",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lists/{{listId}}/summary"
+          },
+          "response": []
+        },
+
+        {
+          "name": "9. Deletar Lista",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/lists/{{listId}}"
+          },
+          "response": []
+        },
+
+        {
+          "name": "10. Checkout da Lista",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": "{{baseUrl}}/api/lists/{{listId}}/checkout" 
+          },
+          "response": []
+        }
+      ]
+    },
+
+    {
+      "name": "BUSCA AVANCADA",
+      "item": [
+        {
+          "name": "Buscar por nome",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/search?q=arroz" },
+          "response": []
+        },
+        {
+          "name": "Buscar feijao",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/search?q=feijão" },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
